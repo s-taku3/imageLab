@@ -47,7 +47,7 @@ listR = []
 listG = []
 listB = []
 image_dir = './assets/'
-filename = "input3.png"
+filename = "input5.png"
 
 input_img = image_dir + filename
 img = cv2.imread(input_img)
@@ -58,10 +58,19 @@ width = img.shape[1]
 """ for i in range(2):
     img_c = cv2.GaussianBlur(img_c,(5,5),0)
 """
-for num in range(3):
+for num in range(4):
     img_c = img
     B, G, R = cv2.split(img_c)
     if(num == 0):
+        R_low = 0
+        R_high = 100
+        G_low = 0
+        G_high = 100
+        B_low = 0
+        B_high = 100
+        color = 'Bl'
+    
+    if(num == 1):
         R_low = 130
         R_high = 300
         G_low = 0
@@ -70,7 +79,7 @@ for num in range(3):
         B_high = 100
         color = 'R'
     
-    if(num == 1):
+    if(num == 2):
         R_low = 0
         R_high = 100
         G_low = 100
@@ -79,7 +88,7 @@ for num in range(3):
         B_high = 100
         color = 'G'
     
-    if(num == 2):
+    if(num == 3):
         R_low = 0
         R_high = 100
         G_low = 0
@@ -141,19 +150,19 @@ for num in range(3):
         img_name = './output/'+str(color)+str(i)+'.png'
         cv2.imwrite(img_name,img_output)
         target_file = r""+str(img_name)+""
-        if(num == 0):
+        if(num == 1):
             with open (target_file,'rb') as f:
                 data = f.read()
                 binarySquareR = base64.b64encode(data)
             listR.append(binarySquareR)
         
-        if(num == 1):
+        if(num == 2):
             with open (target_file,'rb') as f:
                 data = f.read()
                 binarySquareG = base64.b64encode(data)
             listG.append(binarySquareG)
 
-        if(num == 2):
+        if(num == 3):
             with open (target_file,'rb') as f:
                 data = f.read()
                 binarySquareB = base64.b64encode(data)
@@ -162,20 +171,26 @@ for num in range(3):
         print(rect)
 
     cv2.imwrite('./output/'+str(color)+'output.png',img_th)
-    
     if(num == 0):
+        target_file = r"./output/Routput.png"
+        with open(target_file, 'rb') as f:
+            data = f.read()
+        binaryBl = base64.b64encode(data)
+        Blackdict = {"textR":binaryBl}
+    
+    if(num == 1):
         target_file = r"./output/Routput.png"
         with open(target_file, 'rb') as f:
             data = f.read()
         binaryR = base64.b64encode(data)
         reddict = {"textR":binaryR, "squareR":listR}
-    if(num == 1):
+    if(num == 2):
         target_file = r"./output/Goutput.png"
         with open(target_file, 'rb') as f:
             data = f.read()
         binaryG = base64.b64encode(data)
         greendict = {"textG":binaryG, "squareG":listG}
-    if(num == 2):
+    if(num == 3):
         target_file = r"./output/Boutput.png"
         with open(target_file, 'rb') as f:
             data = f.read()
@@ -194,7 +209,7 @@ encode_file=r"encodeB.txt"
 with open(encode_file,"wb") as f:
     f.write(binaryB)
 """
-imgdict = {"red":reddict, "green":greendict, "blue":bluedict}
+imgdict = {"Black":Blackdict,"red":reddict, "green":greendict, "blue":bluedict}
 #print(imgdict)
 
 print('end')
