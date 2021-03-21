@@ -107,7 +107,9 @@ for num in range(4):
     img_th = cv2.dilate(img_th,neiborhood,iterations=7)
     #img_th = cv2.ximgproc.thinning(img_th,thinningType = cv2.ximgproc.THINNING_GUOHALL)
     #img_th = cv2.dilate(img_th,neiborhood,iterations=1)
-
+    if(num == 0):
+        img_th_Bl = img_th
+    
     # Step 2 ----------------------------------------------------------------------------------------------
     contours = cv2.findContours(img_th, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[0]
 
@@ -143,6 +145,7 @@ for num in range(4):
         rects.append(rect)
         outputs.append(getPartImageByRect(rect))
         img_th = cv2.rectangle(img_th,(rect[2]-100,rect[1]+100),(rect[3]+100,rect[0]-100),(0,0,0),-1)
+        img_th_Bl = cv2.rectangle(img_th_Bl,(rect[2],rect[1]),(rect[3],rect[0]),(0,0,0),-1)
         if((abs(beforeRect[0]-rect[0])<200)and(abs(beforeRect[1]-rect[1])<200)and(abs(beforeRect[2]-rect[2])<200)and(abs(beforeRect[3]-rect[3])<200)):
             continue
 
@@ -171,13 +174,6 @@ for num in range(4):
         print(rect)
 
     cv2.imwrite('./output/'+str(color)+'output.png',img_th)
-    if(num == 0):
-        target_file = r"./output/Routput.png"
-        with open(target_file, 'rb') as f:
-            data = f.read()
-        binaryBl = base64.b64encode(data)
-        Blackdict = {"textR":binaryBl}
-    
     if(num == 1):
         target_file = r"./output/Routput.png"
         with open(target_file, 'rb') as f:
@@ -196,6 +192,15 @@ for num in range(4):
             data = f.read()
         binaryB = base64.b64encode(data)
         bluedict = {"textB":binaryB, "squareB":listB}
+    
+    
+cv2.imwrite('./output/Bloutput.png',img_th_Bl)
+target_file = r"./output/Bloutput.png"
+with open(target_file, 'rb') as f:
+    data = f.read()
+binaryBl = base64.b64encode(data)
+Blackdict = {"textBl":binaryBl}
+    
 """ 
 encode_file=r"encodeR.txt"
 with open(encode_file,"wb") as f:
@@ -218,7 +223,7 @@ print('end')
 plt.gray()
 
 plt.subplot(1,2,1)
-plt.imshow(img_th, vmin=0, vmax=255, interpolation = 'none')
+plt.imshow(img_th_Bl, vmin=0, vmax=255, interpolation = 'none')
 cv2.imwrite('./output/blue_output.png', img_th)
 plt.title('Threshold')
 
