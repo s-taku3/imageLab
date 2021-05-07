@@ -47,7 +47,7 @@ listR = []
 listG = []
 listB = []
 image_dir = './assets/'
-filename = "input5.png"
+filename = "IMG_2747.png"
 
 input_img = image_dir + filename
 img = cv2.imread(input_img)
